@@ -79,7 +79,7 @@ class FrontmatterImageSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName("YAML Keys")
             .setDesc(
-                "Frontmatter keys with image URLs; one per line. Only the first populated key's image will be rendered.",
+                "Frontmatter keys that contain image src; one per line. Only the first populated key's image will be rendered.",
             )
             .addTextArea((text) =>
                 text
