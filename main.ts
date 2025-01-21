@@ -38,6 +38,7 @@ export default class FrontmatterImagePlugin extends Plugin {
 
                 const currentImageKey = this.settings.imageKeys.find(key => frontmatter[key]);
                 const currentImageValue = currentImageKey && frontmatter[currentImageKey];
+                if (!currentImageValue) return;
 
                 const div = document.createElement("div");
                 const img = renderFrontmatterImage(currentImageValue);
