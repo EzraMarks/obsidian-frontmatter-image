@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-frontmatter-image",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Enables rendering of images specified in frontmatter properties.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
