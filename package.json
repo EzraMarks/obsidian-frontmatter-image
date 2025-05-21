@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-frontmatter-image",
 	"version": "1.0.0",
-	"description": "Enables rendering of images specified in frontmatter properties.",
+	"description": "Obsidian plugin that automatically displays images using URLs stored in frontmatter, with no manual image embedding required.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

@@ -3,7 +3,7 @@
 	"name": "Frontmatter Image",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Enables rendering of images specified in frontmatter properties.",
+	"description": "Automatically displays images using URLs stored in your frontmatter, with no manual image embedding required.",
 	"author": "Ezra Marks",
 	"authorUrl": "ezramarks.com",
 	"isDesktopOnly": false

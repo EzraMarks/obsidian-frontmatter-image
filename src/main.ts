@@ -6,7 +6,7 @@ import {
     Setting,
 } from "obsidian";
 
-import { frontmatterImageEditorExtension, renderFrontmatterImage } from "frontmatterImageEditorExtension";
+import { frontmatterImageEditorExtension, renderFrontmatterImage } from "src/frontmatterImageEditorExtension";
 
 interface FrontmatterImagePluginSettings {
     imageKeys: string[];
