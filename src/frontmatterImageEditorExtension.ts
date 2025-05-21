@@ -10,7 +10,7 @@ import {
     EditorView,
     WidgetType,
 } from "@codemirror/view";
-import FrontmatterImagePlugin from "main";
+import FrontmatterImagePlugin from "./main";
 import { Pos, TFile } from "obsidian";
 
 export interface FrontmatterImageStateFieldValue {
