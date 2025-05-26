@@ -43,8 +43,9 @@ export default class FrontmatterImagePlugin extends Plugin {
                 const div = document.createElement("div");
                 const img = renderFrontmatterImage(currentImageValue);
                 div.appendChild(img);
-                div.insertAdjacentHTML("beforeend", "<br/>");
-                element.insertAdjacentElement("beforeend", div);
+                const br = document.createElement("br");
+                div.appendChild(br);
+                element.appendChild(div);
             },
         );
     }

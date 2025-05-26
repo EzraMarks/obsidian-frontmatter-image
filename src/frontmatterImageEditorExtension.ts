@@ -19,10 +19,10 @@ export interface FrontmatterImageStateFieldValue {
 }
 
 export const renderFrontmatterImage = (src: string): HTMLElement => {
-	const img = document.createElement("img");
-	img.src = src;
-	img.style.display = "block";
-	return img;
+    const img = document.createElement("img");
+    img.src = src;
+    img.classList.add("frontmatter-image");
+    return img;
 }
 
 export const frontmatterImageEditorExtension = (
