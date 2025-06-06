@@ -12,17 +12,11 @@ import {
 } from "@codemirror/view";
 import FrontmatterImagePlugin from "./main";
 import { Pos, TFile } from "obsidian";
+import { getImageSrc, renderFrontmatterImage } from "./utils";
 
 export interface FrontmatterImageStateFieldValue {
     readonly activeFile: TFile;
     decorationSet?: DecorationSet;
-}
-
-export const renderFrontmatterImage = (src: string): HTMLElement => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.classList.add("frontmatter-image");
-    return img;
 }
 
 export const frontmatterImageEditorExtension = (
@@ -35,9 +29,9 @@ export const frontmatterImageEditorExtension = (
 
     const buildDecorationSet = (
         frontmatterPosition: Pos,
-        currentImageValue?: string,
+        resolvedImageSrc?: string,
     ) => {
-        if (!currentImageValue) return Decoration.none;
+        if (!resolvedImageSrc) return Decoration.none;
 
         const builder = new RangeSetBuilder<Decoration>();
         builder.add(
@@ -46,7 +40,7 @@ export const frontmatterImageEditorExtension = (
             Decoration.widget({
                 widget: new (class extends WidgetType {
                     toDOM(view: EditorView): HTMLElement {
-						return renderFrontmatterImage(currentImageValue);
+                        return renderFrontmatterImage(resolvedImageSrc);
                     }
                 })(),
             }),
@@ -69,29 +63,27 @@ export const frontmatterImageEditorExtension = (
             oldValue: FrontmatterImageStateFieldValue | undefined,
             transaction: Transaction,
         ): FrontmatterImageStateFieldValue | undefined => {
-			if (!oldValue) return;
+            if (!oldValue) return;
 
             if (!isLivePreview()) {
-				return { ...oldValue, decorationSet: undefined };
+                return { ...oldValue, decorationSet: undefined };
             }
 
             const cachedMetadata = plugin.app.metadataCache.getFileCache(oldValue.activeFile);
-            const frontmatterCache = cachedMetadata?.frontmatter;
             const frontmatterPosition = cachedMetadata?.frontmatterPosition;
-            if (!frontmatterCache || !frontmatterPosition) {
-				return { ...oldValue, decorationSet: undefined };
+            if (!frontmatterPosition) {
+                return { ...oldValue, decorationSet: undefined };
             }
 
-            const currentImageKey = plugin.settings.imageKeys.find(key => frontmatterCache[key]);
-            const currentImageValue = currentImageKey && frontmatterCache[currentImageKey];
+            const imageSrc = getImageSrc(oldValue.activeFile.path, plugin);
 
-			return {
-				...oldValue,
-				decorationSet:  buildDecorationSet(
-					frontmatterPosition,
-					currentImageValue,
-				)
-			};
+            return {
+                ...oldValue,
+                decorationSet: buildDecorationSet(
+                    frontmatterPosition,
+                    imageSrc,
+                )
+            };
         },
         provide: (
             field: StateField<FrontmatterImageStateFieldValue | undefined>,

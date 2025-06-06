@@ -1,12 +1,13 @@
 import {
     App,
     MarkdownPostProcessorContext,
+    MarkdownRenderer,
     Plugin,
     PluginSettingTab,
-    Setting,
+    Setting
 } from "obsidian";
-
-import { frontmatterImageEditorExtension, renderFrontmatterImage } from "src/frontmatterImageEditorExtension";
+import { frontmatterImageEditorExtension, } from "src/frontmatterImageEditorExtension";
+import { getImageSrc, renderFrontmatterImage } from "./utils";
 
 interface FrontmatterImagePluginSettings {
     imageKeys: string[];
@@ -24,24 +25,19 @@ export default class FrontmatterImagePlugin extends Plugin {
 
         this.addSettingTab(new FrontmatterImageSettingTab(this.app, this));
 
-		// Register editor extension for editor view (live preview)
+        // Register editor extension for editor view (live preview)
         this.registerEditorExtension(frontmatterImageEditorExtension(this));
 
         // Register markdown post-processor for reading view
         this.registerMarkdownPostProcessor(
             (element: HTMLElement, context: MarkdownPostProcessorContext) => {
-				if (!element.hasClass("mod-frontmatter")) return;
+                if (!element.hasClass("mod-frontmatter")) return;
 
-                const fileCache = this.app.metadataCache.getCache(context.sourcePath);
-                const frontmatter = fileCache?.frontmatter;
-                if (!frontmatter) return;
-
-                const currentImageKey = this.settings.imageKeys.find(key => frontmatter[key]);
-                const currentImageValue = currentImageKey && frontmatter[currentImageKey];
-                if (!currentImageValue) return;
+                const imageSrc = getImageSrc(context.sourcePath, this);
+                if (!imageSrc) return;
 
                 const div = document.createElement("div");
-                const img = renderFrontmatterImage(currentImageValue);
+                const img = renderFrontmatterImage(imageSrc);
                 div.appendChild(img);
                 const br = document.createElement("br");
                 div.appendChild(br);
@@ -50,7 +46,7 @@ export default class FrontmatterImagePlugin extends Plugin {
         );
     }
 
-    onunload() {}
+    onunload() { }
 
     async loadSettings() {
         this.settings = Object.assign(
@@ -81,14 +77,14 @@ class FrontmatterImageSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName("YAML keys")
             .setDesc(
-                "Frontmatter keys that contain image src; one per line. Only the first populated key's image will be rendered.",
+                "Frontmatter keys that contain image source; one per line. Only the first populated key's image will be rendered.",
             )
             .addTextArea((text) =>
                 text
                     .setPlaceholder("Enter your keys")
                     .setValue(this.plugin.settings.imageKeys.join("\n"))
                     .onChange(async (value) => {
-                        this.plugin.settings.imageKeys =  value.split("\n").map(key => key.trim()).filter(key => key.length > 0);
+                        this.plugin.settings.imageKeys = value.split("\n").map(key => key.trim()).filter(key => key.length > 0);
                         await this.plugin.saveSettings();
                     }),
             );
