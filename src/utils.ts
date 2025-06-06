@@ -9,6 +9,8 @@ export const getImageSrc = (activeFilePath: string, plugin: FrontmatterImagePlug
         .map(key => frontmatter[key])
         .find(value => !!value);
 
+    if (!rawValue) return;
+
     // Extract image from wikilink format: [[img.jpg|...]] or [[img.jpg]]
     const wikilinkMatch = rawValue.match(/^\[\[([^|\]]+)(?:\|[^\]]+)?\]\]$/);
     if (wikilinkMatch) {
