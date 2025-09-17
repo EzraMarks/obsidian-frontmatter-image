@@ -7,7 +7,7 @@ import {
     Setting
 } from "obsidian";
 import { frontmatterImageEditorExtension, } from "src/frontmatterImageEditorExtension";
-import { getImageSrc, renderFrontmatterImage } from "./utils";
+import { getImageSrc, appendFrontmatterImage } from "./utils";
 
 interface FrontmatterImagePluginSettings {
     imageKeys: string[];
@@ -36,12 +36,9 @@ export default class FrontmatterImagePlugin extends Plugin {
                 const imageSrc = getImageSrc(context.sourcePath, this);
                 if (!imageSrc) return;
 
-                const div = document.createElement("div");
-                const img = renderFrontmatterImage(imageSrc);
-                div.appendChild(img);
-                const br = document.createElement("br");
-                div.appendChild(br);
-                element.appendChild(div);
+                const div = element.createDiv();
+                appendFrontmatterImage(div, imageSrc);
+                div.createEl("br");
             },
         );
     }

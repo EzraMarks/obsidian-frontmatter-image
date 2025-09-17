@@ -12,7 +12,7 @@ import {
 } from "@codemirror/view";
 import FrontmatterImagePlugin from "./main";
 import { Pos, TFile } from "obsidian";
-import { getImageSrc, renderFrontmatterImage } from "./utils";
+import { getImageSrc, appendFrontmatterImage } from "./utils";
 
 export interface FrontmatterImageStateFieldValue {
     readonly activeFile: TFile;
@@ -40,7 +40,7 @@ export const frontmatterImageEditorExtension = (
             Decoration.widget({
                 widget: new (class extends WidgetType {
                     toDOM(view: EditorView): HTMLElement {
-                        return renderFrontmatterImage(resolvedImageSrc);
+                        return appendFrontmatterImage(view.contentDOM, resolvedImageSrc);
                     }
                 })(),
             }),
