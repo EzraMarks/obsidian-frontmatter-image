@@ -7,7 +7,7 @@ export const getImageSrc = (activeFilePath: string, plugin: FrontmatterImagePlug
 
     let rawValue = plugin.settings.imageKeys
         .map(key => frontmatter[key])
-        .find(value => !!value);
+        .find((value): value is string => typeof value === "string" && !!value.trim());
 
     if (!rawValue) return;
 
