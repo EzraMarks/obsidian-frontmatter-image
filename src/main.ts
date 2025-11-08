@@ -1,7 +1,6 @@
 import {
     App,
     MarkdownPostProcessorContext,
-    MarkdownRenderer,
     Plugin,
     PluginSettingTab,
     Setting
