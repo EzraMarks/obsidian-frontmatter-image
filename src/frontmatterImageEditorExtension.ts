@@ -11,7 +11,7 @@ import {
     WidgetType,
 } from "@codemirror/view";
 import FrontmatterImagePlugin from "./main";
-import { Pos, TFile } from "obsidian";
+import { Pos, TFile, editorLivePreviewField } from "obsidian";
 import { getImageSrc, appendFrontmatterImage } from "./utils";
 
 export interface FrontmatterImageStateFieldValue {
@@ -22,11 +22,6 @@ export interface FrontmatterImageStateFieldValue {
 export const frontmatterImageEditorExtension = (
     plugin: FrontmatterImagePlugin,
 ): StateField<FrontmatterImageStateFieldValue | undefined> => {
-    const isLivePreview = () => {
-        const view = EditorView.findFromDOM(document.body);
-        return view?.contentDOM.closest(".is-live-preview") !== null;
-    };
-
     const buildDecorationSet = (
         frontmatterPosition: Pos,
         resolvedImageSrc?: string,
@@ -65,7 +60,8 @@ export const frontmatterImageEditorExtension = (
         ): FrontmatterImageStateFieldValue | undefined => {
             if (!oldValue) return;
 
-            if (!isLivePreview()) {
+            const isLivePreview = transaction.state.field(editorLivePreviewField);
+            if (!isLivePreview) {
                 return { ...oldValue, decorationSet: undefined };
             }
 
